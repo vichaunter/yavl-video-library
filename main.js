@@ -12,6 +12,7 @@ function createWindow() {
       contextIsolation: false,
       enableRemoteModule: true,
     },
+    skipTaskbar: true,
   });
 
   if (process.env.NODE_ENV === "development") {
@@ -21,8 +22,6 @@ function createWindow() {
   }
 
   ipcMain.on("open-file", (event, filePath) => {
-    console.log(filePath);
-
     shell.openPath(filePath);
   });
 

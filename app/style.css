@@ -7,6 +7,11 @@ body {
   flex-direction: column;
 }
 
+.folder-breadcrumbs {
+  -webkit-app-region: drag;
+  cursor: grab;
+}
+
 .folder-breadcrumbs span {
   display: inline-block;
   padding: 10px 2px;

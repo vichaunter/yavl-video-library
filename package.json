@@ -11,7 +11,7 @@
     "clean": "rimraf .cache output dist",
     "ffprobe": "node download_ffprobe.js",
     "build": "yarn clean && yarn ffprobe && parcel build app/index.html --no-minify --no-source-maps --public-url ./ --target electron",
-    "watch": "parcel watch app/index.html --public-url ./ --target electron",
+    "watch": "parcel watch app/index.html app/**/*.css app/**/*.js app/**/*.tsx app/**/*.jsx --public-url ./ --target electron",
     "build-app": "yarn build && electron-builder",
     "reinstall": "rimraf node_modules && yarn"
   },
@@ -35,6 +35,7 @@
     "@ant-design/icons": "^4.6.2",
     "@babel/runtime": "^7.23.7",
     "antd": "^5.12.5",
+    "classnames": "^2.5.1",
     "concurrently": "^8.2.2",
     "ffbinaries": "^1.1.4",
     "flag-icon-css": "^3.5.0",
@@ -42,7 +43,8 @@
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "styled-components": "^6.1.6"
+    "styled-components": "^6.1.6",
+    "zustand": "^4.5.1"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-0",

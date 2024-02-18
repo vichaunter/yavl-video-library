@@ -59,17 +59,13 @@ class Store {
       //@ts-ignore
       db.put(altTitle, info);
     }
-    console.log(info);
+
     return info;
   };
 
-  getLastFolder = async () => {
-    return await db.get("lastFolder");
-  };
+  getLastFolder = async () => await db.get("lastFolder");
 
-  saveLastFolder(path: string) {
-    return db.put("lastFolder", path);
-  }
+  saveLastFolder = (path: string) => db.put("lastFolder", path);
 }
 
 const store = new Store();
