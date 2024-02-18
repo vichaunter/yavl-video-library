@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <base href="./" /> <!-- required to get asset loaded when in built - https://github.com/parcel-bundler/parcel/issues/1178 -->
+    <meta charset="UTF-8">
+    <title>My Video Browser</title>
+    <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+    <link rel="stylesheet" href="../node_modules/flag-icon-css/css/flag-icon.min.css">
+</head>
+<body>
+    <div id="root"></div>
+    <script src="./index.jsx"></script>
+</body>
+</html>

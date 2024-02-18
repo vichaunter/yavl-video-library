@@ -1,0 +1,80 @@
+body {
+  margin: 0;
+}
+
+.ant-layout-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.folder-breadcrumbs span {
+  display: inline-block;
+  padding: 10px 2px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.folder-breadcrumbs span:hover {
+  background-color: #c6ebf9;
+}
+
+.file-browser > .listing {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.file-item {
+  width: 110px;
+}
+
+.file-item .inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 3px;
+  padding: 10px;
+}
+
+.file-item .inner > *:first-child {
+  font-size: 30px;
+}
+
+.file-item .inner span.filename {
+  text-align: center;
+  display: block;
+  font-size: 13px;
+  word-break: break-word;
+  user-select: none;
+}
+
+.file-item:hover .inner {
+  background-color: #c6ebf9;
+}
+
+.file-item.video-item {
+  width: 200px;
+}
+
+.file-item.video-item .inner {
+  padding: 10px;
+}
+
+.file-item.video-item .cover {
+  width: 100px;
+  height: 150px;
+  background: #cdcdcd;
+  border-radius: 3px;
+}
+
+.file-item.video-item .tags img {
+  height: 20px;
+}
+
+.file-item.video-item .tags img + img {
+  margin-left: 5px;
+}
+
+.file-item.video-item .languages span:first-child {
+  margin-right: 5px;
+}
