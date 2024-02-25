@@ -1,0 +1,26 @@
+{
+    "sourceFile": "src/main/tools/ffprobe.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 2,
+            "patches": [
+                {
+                    "date": 1708873913914,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1708874113418,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,9 +15,9 @@\n const appDirectory = app.getAppPath();\n const useDataDirectory = app.getPath('appData');\n \n const ffprobeBinName = process.platform === 'win32' ? 'ffprobe.exe' : 'ffprobe';\n-const ffprobeBinaryPath = path.join(useDataDirectory, 'bin', ffprobeBinName);\n+const ffprobeBinaryPath = path.join(useDataDirectory, app.name, 'bin', ffprobeBinName);\n \n const semaphore = new Semaphore(1);\n \n function ffprobeExecFile(...args) {\n"
+                },
+                {
+                    "date": 1708874123999,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -21,8 +21,9 @@\n   app.name,\n   'bin',\n   ffprobeBinName,\n );\n+console.log({ffprobeBinaryPath})\n \n const semaphore = new Semaphore(1);\n \n function ffprobeExecFile(...args) {\n"
+                }
+            ],
+            "date": 1708873913914,
+            "name": "Commit-0",
+            "content": "import { execFile } from 'child_process';\nimport path from 'path';\n\nimport { app } from 'electron';\nimport Semaphore from './semaphore';\nimport {\n  getAudioResume,\n  getCleanName,\n  getSubtitleResume,\n  getVideoQuality,\n  getYear,\n} from '../helpers';\n\n// Get the directory of the running Electron app\nconst appDirectory = app.getAppPath();\nconst useDataDirectory = app.getPath('appData')\n\nconst ffprobeBinName = process.platform === 'win32' ? 'ffprobe.exe' : 'ffprobe';\nconst ffprobeBinaryPath = path.join(useDataDirectory, 'bin', ffprobeBinName);\n\nconst semaphore = new Semaphore(1);\n\nfunction ffprobeExecFile(...args) {\n  return new Promise((resolve, reject) => {\n    execFile(ffprobeBinaryPath, args, (err, stdout, stderr) => {\n      if (err) {\n        if (err.code === 'ENOENT') {\n          reject(err);\n        } else {\n          console.error(stderr);\n          reject();\n          // const ffprobeErr = new Error(stderr.split('\\n').pop());\n          // reject(ffprobeErr);\n        }\n      } else {\n        resolve(JSON.parse(stdout));\n      }\n    });\n  });\n}\n\nfunction resumeResponse(response) {\n  const { format, streams } = response;\n\n  const video = streams\n    .filter(\n      (stream) =>\n        stream.codec_type === 'video' && stream.codec_name !== 'mjpeg',\n    )\n    .shift();\n\n  if (!video) {\n    throw new Error('Video stream is missing');\n  }\n\n  const filename = path.basename(format.filename);\n\n  return {\n    fullpath: format.filename,\n    filename,\n    title: getCleanName(filename),\n    year: getYear(filename),\n    width: video.width,\n    height: video.height,\n    size: parseInt(format.size, 10),\n    duration: parseFloat(format.duration),\n    quality: getVideoQuality(video.width),\n    codecName: video.codec_name,\n    codecLongName: video.codec_long_name,\n    formatName: format.format_name,\n    formatLongName: format.format_long_name,\n    audio: getAudioResume(streams),\n    subtitle: getSubtitleResume(streams),\n  };\n}\n\nexport function ffmpegSync(path) {\n  return new Promise((resolve, reject) => {\n    extractVideoInformations(path)\n      .then((data) => {\n        resolve(data);\n      })\n      .catch((err) => reject(err));\n  });\n}\n\nexport default async function extractVideoInformations(source) {\n  // const release = await semaphore.acquire();\n  try {\n    const response = await ffprobeExecFile(\n      '-show_streams',\n      '-show_format',\n      '-print_format',\n      'json',\n      source,\n    );\n    // release();\n\n    return resumeResponse(response);\n  } catch (e) {\n    // release();\n    throw e;\n  }\n}\n"
+        }
+    ]
+}

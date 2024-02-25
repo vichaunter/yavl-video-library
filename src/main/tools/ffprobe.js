@@ -1,7 +1,7 @@
 import { execFile } from 'child_process';
 import path from 'path';
 
-import { app } from 'electron';
+import { app, dialog } from 'electron';
 import Semaphore from './semaphore';
 import {
   getAudioResume,
@@ -13,9 +13,14 @@ import {
 
 // Get the directory of the running Electron app
 const appDirectory = app.getAppPath();
-
+const useDataDirectory = app.getPath('appData');
 const ffprobeBinName = process.platform === 'win32' ? 'ffprobe.exe' : 'ffprobe';
-const ffprobeBinaryPath = path.join(appDirectory, 'bin', ffprobeBinName);
+const ffprobeBinaryPath = path.join(
+  useDataDirectory,
+  'yavl-video-library', //TODO: make it configurable
+  'bin',
+  ffprobeBinName,
+);
 
 const semaphore = new Semaphore(1);
 
@@ -24,7 +29,12 @@ function ffprobeExecFile(...args) {
     execFile(ffprobeBinaryPath, args, (err, stdout, stderr) => {
       if (err) {
         if (err.code === 'ENOENT') {
-          reject(err);
+          dialog.showErrorBox(
+            'Error',
+            `FFprobe binary not found. Please ensure it is installed and try again. [${ffprobeBinaryPath}]`,
+          );
+          app.quit();
+          // reject(err);
         } else {
           console.error(stderr);
           reject();

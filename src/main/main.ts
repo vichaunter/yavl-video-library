@@ -8,16 +8,15 @@
  * When running `npm run build` or `npm run build:main`, this file is compiled to
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
-import { BrowserWindow, app, dialog, ipcMain, shell } from 'electron';
+import { BrowserWindow, app, ipcMain, shell } from 'electron';
 import log from 'electron-log';
 import { autoUpdater } from 'electron-updater';
 import path from 'path';
-import MenuBuilder from './menu';
-import { resolveHtmlPath } from './util';
 import { HANDLERS } from './constants';
 import handlers from './handlers';
+import MenuBuilder from './menu';
 import { HandlersType } from './types';
-import RequestQueue from './services/queue';
+import { resolveHtmlPath } from './util';
 
 class AppUpdater {
   constructor() {
@@ -115,6 +114,8 @@ const createWindow = async () => {
       });
     });
   }
+
+  mainWindow.webContents.openDevTools();
 
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line

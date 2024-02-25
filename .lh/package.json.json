@@ -3,7 +3,7 @@
     "activeCommit": 0,
     "commits": [
         {
-            "activePatchIndex": 2,
+            "activePatchIndex": 3,
             "patches": [
                 {
                     "date": 1708285813521,
@@ -16,6 +16,10 @@
                 {
                     "date": 1708286290520,
                     "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,9 +10,9 @@\n     \"start\": \"concurrently --kill-others \\\"yarn watch\\\" \\\"electron .\\\"\",\r\n     \"clean\": \"rimraf .cache output dist\",\r\n     \"ffprobe\": \"node download_ffprobe.js\",\r\n     \"build\": \"yarn clean && yarn ffprobe && parcel build app/index.html --no-minify --no-source-maps --public-url ./ --target electron\",\r\n-    \"watch\": \"parcel watch app/index.html --public-url ./ --target electron --ignore=db\",\r\n+    \"watch\": \"parcel watch app/index.html app/**/*.css app/**/*.js app/**/*.tsx app/**/*.jsx --public-url ./ --target electron\",\r\n     \"build-app\": \"yarn build && electron-builder\",\r\n     \"reinstall\": \"rimraf node_modules && yarn\"\r\n   },\r\n   \"build\": {\r\n"
+                },
+                {
+                    "date": 1708874291943,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,38 +1,16 @@\n {\n-  \"description\": \"A foundation for scalable desktop apps\",\n-  \"keywords\": [\n-    \"electron\",\n-    \"boilerplate\",\n-    \"react\",\n-    \"typescript\",\n-    \"ts\",\n-    \"sass\",\n-    \"webpack\",\n-    \"hot\",\n-    \"reload\"\n-  ],\n-  \"homepage\": \"https://github.com/electron-react-boilerplate/electron-react-boilerplate#readme\",\n-  \"bugs\": {\n-    \"url\": \"https://github.com/electron-react-boilerplate/electron-react-boilerplate/issues\"\n-  },\n+  \"description\": \"Electron and react local video library\",\n+  \"homepage\": \"\",\n   \"repository\": {\n     \"type\": \"git\",\n     \"url\": \"git+https://github.com/electron-react-boilerplate/electron-react-boilerplate.git\"\n   },\n   \"license\": \"MIT\",\n   \"author\": {\n-    \"name\": \"Electron React Boilerplate Maintainers\",\n-    \"email\": \"electronreactboilerplate@gmail.com\",\n-    \"url\": \"https://electron-react-boilerplate.js.org\"\n+    \"name\": \"VicHaunter\",\n+    \"url\": \"https://www.vichaunter.org\"\n   },\n-  \"contributors\": [\n-    {\n-      \"name\": \"Amila Welihinda\",\n-      \"email\": \"amilajack@gmail.com\",\n-      \"url\": \"https://github.com/amilajack\"\n-    }\n-  ],\n   \"main\": \"./src/main/main.ts\",\n   \"scripts\": {\n     \"build\": \"concurrently \\\"npm run build:main\\\" \\\"npm run build:renderer\\\"\",\n     \"build:dll\": \"cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.renderer.dev.dll.ts\",\n"
                 }
             ],
             "date": 1708285813521,

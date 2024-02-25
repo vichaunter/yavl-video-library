@@ -1,12 +1,11 @@
 {
-  "name": "electron-react-boilerplate",
-  "version": "4.6.0",
-  "description": "A foundation for scalable desktop apps",
+  "name": "yavl-video-library",
+  "version": "1.0.0",
+  "description": "Electron and react local video library",
   "license": "MIT",
   "author": {
-    "name": "Electron React Boilerplate Maintainers",
-    "email": "electronreactboilerplate@gmail.com",
-    "url": "https://github.com/electron-react-boilerplate"
+    "name": "VicHaunter",
+    "url": "https://www.vichaunter.org"
   },
   "main": "./dist/main/main.js",
   "scripts": {
@@ -14,5 +13,7 @@
     "postinstall": "npm run rebuild && npm run link-modules",
     "link-modules": "node -r ts-node/register ../../.erb/scripts/link-modules.ts"
   },
-  "dependencies": {}
+  "dependencies": {
+    "level": "^8.0.1"
+  }
 }

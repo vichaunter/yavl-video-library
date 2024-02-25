@@ -1,0 +1,18 @@
+{
+    "sourceFile": "release/app/package.json",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1708874326626,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1708874326626,
+            "name": "Commit-0",
+            "content": "{\n  \"name\": \"yavl-video-library\",\n  \"version\": \"1.0.0\",\n  \"description\": \"Electron and react local video library\",\n  \"license\": \"MIT\",\n  \"author\": {\n    \"name\": \"VicHaunter\",\n    \"url\": \"https://www.vichaunter.org\"\n  },\n  \"main\": \"./dist/main/main.js\",\n  \"scripts\": {\n    \"rebuild\": \"node -r ts-node/register ../../.erb/scripts/electron-rebuild.js\",\n    \"postinstall\": \"npm run rebuild && npm run link-modules\",\n    \"link-modules\": \"node -r ts-node/register ../../.erb/scripts/link-modules.ts\"\n  },\n  \"dependencies\": {\n    \"level\": \"^8.0.1\"\n  }\n}\n"
+        }
+    ]
+}
