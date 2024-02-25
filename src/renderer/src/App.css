@@ -1,0 +1,55 @@
+body {
+  font-family: 'Proxima Nova Lt';
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(calc(25% - 10px), 1fr)
+  ); /* Four columns, each taking 25% of the container width with 10px gap */
+  gap: 1px; /* Gap between grid items */
+}
+
+.grid-item {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%; /* 16:9 aspect ratio */
+  background-color: #000; /* Placeholder background color */
+  color: black;
+  position: relative;
+}
+
+.grid-item > div {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+}
+
+@media screen and (max-width: 1900px) {
+  .grid-container {
+    grid-template-columns: repeat(
+      auto-fill,
+      minmax(calc(33.33% - 1px), 1fr)
+    ); /* Three columns */
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .grid-container {
+    grid-template-columns: repeat(
+      auto-fill,
+      minmax(calc(50% - 1px), 1fr)
+    ); /* Two columns */
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .grid-container {
+    grid-template-columns: repeat(
+      auto-fill,
+      minmax(calc(100% - 1px), 1fr)
+    ); /* Single column */
+  }
+}

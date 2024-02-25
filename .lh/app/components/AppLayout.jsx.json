@@ -1,0 +1,26 @@
+{
+    "sourceFile": "app/components/AppLayout.jsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 2,
+            "patches": [
+                {
+                    "date": 1708280858801,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1708281023060,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,16 +2,19 @@\n import { Button, Layout } from \"antd\";\r\n import FileBrowser from \"./FileBrowser\";\r\n import FolderBreadcrumb from \"./FolderBreadcrumb\";\r\n import useFolder from \"../hooks/useFolder\";\r\n+import useHistory from \"../hooks/useHistory\";\r\n \r\n const { Content, Footer, Sider } = Layout;\r\n \r\n const AppLayout = () => {\r\n   const { openDialog, current, loadLastFolder } = useFolder();\r\n+  const {load: loadHistory} = useHistory()\r\n \r\n   useEffect(() => {\r\n     loadLastFolder();\r\n+    loadHistory()\r\n   }, []);\r\n \r\n   return (\r\n     <Layout>\r\n"
+                },
+                {
+                    "date": 1708281708369,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,15 +1,16 @@\n import React, { useEffect, useState } from \"react\";\r\n import { Button, Layout } from \"antd\";\r\n import FileBrowser from \"./FileBrowser\";\r\n import FolderBreadcrumb from \"./FolderBreadcrumb\";\r\n-import useFolder from \"../hooks/useFolder\";\r\n+import useFolder, { useFolderStore } from \"../hooks/useFolder\";\r\n import useHistory from \"../hooks/useHistory\";\r\n \r\n const { Content, Footer, Sider } = Layout;\r\n \r\n const AppLayout = () => {\r\n-  const { openDialog, current, loadLastFolder } = useFolder();\r\n+  const { openDialog } = useFolder();\r\n+  const [current, loadLastFolder] = useFolderStore(state => [state.current, state.loadLastFolder])\r\n   const { load: loadHistory } = useHistory();\r\n \r\n   useEffect(() => {\r\n     loadLastFolder();\r\n"
+                }
+            ],
+            "date": 1708280858801,
+            "name": "Commit-0",
+            "content": "import React, { useEffect, useState } from \"react\";\r\nimport { Button, Layout } from \"antd\";\r\nimport FileBrowser from \"./FileBrowser\";\r\nimport FolderBreadcrumb from \"./FolderBreadcrumb\";\r\nimport useFolder from \"../hooks/useFolder\";\r\n\r\nconst { Content, Footer, Sider } = Layout;\r\n\r\nconst AppLayout = () => {\r\n  const { openDialog, current, loadLastFolder } = useFolder();\r\n\r\n  useEffect(() => {\r\n    loadLastFolder()\r\n  }, [])\r\n\r\n  return (\r\n    <Layout>\r\n      <Content>\r\n        <Button onClick={openDialog}>Open folder</Button>\r\n        <FolderBreadcrumb fullPath={current} />\r\n        <FileBrowser folder={current} />\r\n      </Content>\r\n    </Layout>\r\n  );\r\n};\r\n\r\nexport default AppLayout;\r\n"
+        }
+    ]
+}

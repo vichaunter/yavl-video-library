@@ -1,0 +1,26 @@
+{
+    "sourceFile": "package.json",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 2,
+            "patches": [
+                {
+                    "date": 1708285813521,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1708285874832,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -6,13 +6,13 @@\n   \"license\": \"ISC\",\r\n   \"main\": \"main.js\",\r\n   \"scripts\": {\r\n     \"test\": \"jest\",\r\n-    \"start\": \"concurrently --kill-others \\\"yarn watch --ignore db\\\" \\\"electron .\\\"\",\r\n+    \"start\": \"concurrently --kill-others \\\"yarn watch\\\" \\\"electron .\\\"\",\r\n     \"clean\": \"rimraf .cache output dist\",\r\n     \"ffprobe\": \"node download_ffprobe.js\",\r\n     \"build\": \"yarn clean && yarn ffprobe && parcel build app/index.html --no-minify --no-source-maps --public-url ./ --target electron\",\r\n-    \"watch\": \"parcel watch app/index.html --public-url ./ --target electron\",\r\n+    \"watch\": \"parcel watch app/index.html --public-url ./ --target electron --ignore=db\",\r\n     \"build-app\": \"yarn build && electron-builder\",\r\n     \"reinstall\": \"rimraf node_modules && yarn\"\r\n   },\r\n   \"build\": {\r\n"
+                },
+                {
+                    "date": 1708286290520,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,9 +10,9 @@\n     \"start\": \"concurrently --kill-others \\\"yarn watch\\\" \\\"electron .\\\"\",\r\n     \"clean\": \"rimraf .cache output dist\",\r\n     \"ffprobe\": \"node download_ffprobe.js\",\r\n     \"build\": \"yarn clean && yarn ffprobe && parcel build app/index.html --no-minify --no-source-maps --public-url ./ --target electron\",\r\n-    \"watch\": \"parcel watch app/index.html --public-url ./ --target electron --ignore=db\",\r\n+    \"watch\": \"parcel watch app/index.html app/**/*.css app/**/*.js app/**/*.tsx app/**/*.jsx --public-url ./ --target electron\",\r\n     \"build-app\": \"yarn build && electron-builder\",\r\n     \"reinstall\": \"rimraf node_modules && yarn\"\r\n   },\r\n   \"build\": {\r\n"
+                }
+            ],
+            "date": 1708285813521,
+            "name": "Commit-0",
+            "content": "{\r\n  \"name\": \"yavl-video-library\",\r\n  \"description\": \"YAVL Yet Another Video Library, manage your collection with the minimum effort\",\r\n  \"author\": \"VicHaunter <vichaunter@gmail.com> (https://www.vichaunter.org)\",\r\n  \"version\": \"1.0.0\",\r\n  \"license\": \"ISC\",\r\n  \"main\": \"main.js\",\r\n  \"scripts\": {\r\n    \"test\": \"jest\",\r\n    \"start\": \"concurrently --kill-others \\\"yarn watch --ignore db\\\" \\\"electron .\\\"\",\r\n    \"clean\": \"rimraf .cache output dist\",\r\n    \"ffprobe\": \"node download_ffprobe.js\",\r\n    \"build\": \"yarn clean && yarn ffprobe && parcel build app/index.html --no-minify --no-source-maps --public-url ./ --target electron\",\r\n    \"watch\": \"parcel watch app/index.html --public-url ./ --target electron\",\r\n    \"build-app\": \"yarn build && electron-builder\",\r\n    \"reinstall\": \"rimraf node_modules && yarn\"\r\n  },\r\n  \"build\": {\r\n    \"appId\": \"com.github.vichaunter.yavl\",\r\n    \"productName\": \"YAVL Video Library\",\r\n    \"directories\": {\r\n      \"output\": \"output\"\r\n    },\r\n    \"files\": [\r\n      \"bin/*\",\r\n      \"dist/*\",\r\n      \"node_modules/*\",\r\n      \"main.js\"\r\n    ],\r\n    \"asarUnpack\": [\r\n      \"bin/**\"\r\n    ]\r\n  },\r\n  \"dependencies\": {\r\n    \"@ant-design/icons\": \"^4.6.2\",\r\n    \"@babel/runtime\": \"^7.23.7\",\r\n    \"antd\": \"^5.12.5\",\r\n    \"classnames\": \"^2.5.1\",\r\n    \"concurrently\": \"^8.2.2\",\r\n    \"ffbinaries\": \"^1.1.4\",\r\n    \"flag-icon-css\": \"^3.5.0\",\r\n    \"level\": \"^8.0.1\",\r\n    \"prop-types\": \"^15.7.2\",\r\n    \"react\": \"^17.0.2\",\r\n    \"react-dom\": \"^17.0.2\",\r\n    \"styled-components\": \"^6.1.6\",\r\n    \"zustand\": \"^4.5.1\"\r\n  },\r\n  \"devDependencies\": {\r\n    \"@babel/core\": \"^7.0.0-0\",\r\n    \"@babel/plugin-proposal-class-properties\": \"^7.14.5\",\r\n    \"@babel/plugin-transform-runtime\": \"^7.23.7\",\r\n    \"@babel/preset-env\": \"^7.14.5\",\r\n    \"@babel/preset-react\": \"^7.14.5\",\r\n    \"babel-eslint\": \"^10.1.0\",\r\n    \"electron\": \"^13.1.2\",\r\n    \"electron-builder\": \"^22.11.7\",\r\n    \"electron-reload\": \"^2.0.0-alpha.1\",\r\n    \"electron-reloader\": \"^1.2.3\",\r\n    \"eslint\": \"^7.28.0\",\r\n    \"eslint-config-airbnb\": \"^18.2.1\",\r\n    \"eslint-plugin-import\": \"^2.23.4\",\r\n    \"eslint-plugin-jest\": \"^24.3.6\",\r\n    \"eslint-plugin-jsx-a11y\": \"^6.4.1\",\r\n    \"eslint-plugin-react\": \"^7.24.0\",\r\n    \"eslint-plugin-react-hooks\": \"^4.2.0\",\r\n    \"jest\": \"^27.0.4\",\r\n    \"parcel-bundler\": \"^1.12.5\",\r\n    \"regenerator-runtime\": \"^0.13.7\",\r\n    \"rimraf\": \"^5.0.5\",\r\n    \"typescript\": \"^5.3.3\"\r\n  }\r\n}\r\n"
+        }
+    ]
+}

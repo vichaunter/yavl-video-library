@@ -1,0 +1,26 @@
+{
+    "sourceFile": "app/hooks/useFolder.ts",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 2,
+            "patches": [
+                {
+                    "date": 1708280718791,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1708280832368,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,13 +5,17 @@\n const useFolder = () => {\r\n   const [current, setCurrent] = useState<string>();\r\n \r\n   useEffect(() => {\r\n-    store.getLastFolder().then((lastFolder) => {\r\n-      console.log({ lastFolder });\r\n-      setCurrent(lastFolder);\r\n-    });\r\n+    loadLastFolder()\r\n   }, []);\r\n+  \r\n+  const loadLastFolder = async () => {\r\n+    const lastFolder = await store.getLastFolder()\r\n+    \r\n+    console.log({ lastFolder });\r\n+    setCurrent(lastFolder);\r\n+  }\r\n \r\n   const openDialog = () => {\r\n     ipcRenderer.send(\"open-directory\");\r\n   };\r\n@@ -25,8 +29,9 @@\n \r\n   return {\r\n     current,\r\n     openDialog,\r\n+    loadLastFolder\r\n   };\r\n };\r\n \r\n export default useFolder;\r\n"
+                },
+                {
+                    "date": 1708280865225,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,12 +4,10 @@\n \r\n const useFolder = () => {\r\n   const [current, setCurrent] = useState<string>();\r\n \r\n-  useEffect(() => {\r\n-    loadLastFolder();\r\n-  }, []);\r\n \r\n+\r\n   const loadLastFolder = async () => {\r\n     const lastFolder = await store.getLastFolder();\r\n \r\n     console.log({ lastFolder });\r\n"
+                }
+            ],
+            "date": 1708280718791,
+            "name": "Commit-0",
+            "content": "import { ipcRenderer } from \"electron\";\r\nimport { useEffect, useState } from \"react\";\r\nimport store from \"../services/store\";\r\n\r\nconst useFolder = () => {\r\n  const [current, setCurrent] = useState<string>();\r\n\r\n  useEffect(() => {\r\n    store.getLastFolder().then((lastFolder) => {\r\n      console.log({lastFolder})\r\n      setCurrent(lastFolder);\r\n    });\r\n  }, []);\r\n\r\n  const openDialog = () => {\r\n    ipcRenderer.send(\"open-directory\");\r\n  };\r\n\r\n  ipcRenderer.on(\"selected-directory\", (event, selectedPath) => {\r\n    console.log(`Selected Directory: ${selectedPath}`);\r\n    setCurrent(selectedPath);\r\n    store.saveLastFolder(selectedPath);\r\n    // Handle the selected path as needed\r\n  });\r\n\r\n  return {\r\n    current,\r\n    openDialog,\r\n  };\r\n};\r\n\r\nexport default useFolder;\r\n"
+        }
+    ]
+}

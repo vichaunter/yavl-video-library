@@ -1,0 +1,22 @@
+{
+    "sourceFile": "app/components/FileBrowser.jsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 1,
+            "patches": [
+                {
+                    "date": 1708264690341,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1708264709813,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,13 +1,10 @@\n+import PropTypes from \"prop-types\";\r\n import React from \"react\";\r\n-import PropTypes from \"prop-types\";\r\n-import { readdirSync } from \"fs\";\r\n-import path, { join } from \"path\";\r\n \r\n-import isVideoFile from \"../tools/is-video-file\";\r\n+import { Row } from \"antd\";\r\n+import { listFilesRecursively } from \"../helpers\";\r\n import VideoFile from \"./VideoFile\";\r\n-import { getCleanName } from \"../tools/file\";\r\n-import { Row } from \"antd\";\r\n \r\n const FileBrowser = ({ folder }) => {\r\n   if (!folder) {\r\n     return <div>No folder</div>;\r\n"
+                }
+            ],
+            "date": 1708264690341,
+            "name": "Commit-0",
+            "content": "import React from \"react\";\r\nimport PropTypes from \"prop-types\";\r\nimport { readdirSync } from \"fs\";\r\nimport path, { join } from \"path\";\r\n\r\nimport isVideoFile from \"../tools/is-video-file\";\r\nimport VideoFile from \"./VideoFile\";\r\nimport { getCleanName } from \"../tools/file\";\r\nimport { Row } from \"antd\";\r\n\r\n\r\n\r\nconst FileBrowser = ({ folder }) => {\r\n  if (!folder) {\r\n    return <div>No folder</div>;\r\n  }\r\n  const { videos } = listFilesRecursively(folder);\r\n\r\n  return (\r\n    <div className=\"file-browser\">\r\n      <Row gutter={[0, 0]} className=\"listing\">\r\n        {videos.map((dirent) => (\r\n          <VideoFile key={dirent.fullPath} dirent={dirent} />\r\n        ))}\r\n      </Row>\r\n    </div>\r\n  );\r\n};\r\n\r\nFileBrowser.propTypes = {\r\n  folder: PropTypes.string,\r\n  openFolder: PropTypes.func,\r\n};\r\n\r\nFileBrowser.defaultProps = {\r\n  folder: \"\",\r\n  openFolder: () => null,\r\n};\r\n\r\nexport default FileBrowser;\r\n"
+        }
+    ]
+}

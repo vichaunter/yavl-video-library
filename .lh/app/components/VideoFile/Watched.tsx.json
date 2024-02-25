@@ -1,0 +1,26 @@
+{
+    "sourceFile": "app/components/VideoFile/Watched.tsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 2,
+            "patches": [
+                {
+                    "date": 1708278008117,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1708278716966,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,11 +1,11 @@\n import React, { useState } from \"react\";\r\n-import useUser from \"../../hooks/useUser\";\r\n+import useHistory from \"../../hooks/useWatchedHistoryStore\";\r\n import { EyeFilled, EyeOutlined } from \"@ant-design/icons\";\r\n import { useEffect } from \"react/cjs/react.production.min\";\r\n \r\n const Watched = ({ title }) => {\r\n-  const { isVideoWatched, toggleVideoWatched, watchHistory } = useUser();\r\n+  const { isVideoWatched, toggleVideoWatched, watchHistory } = useHistory();\r\n   const [watched, setWatched] = useState(false);\r\n \r\n   useEffect(() => {\r\n     async function load() {\r\n"
+                },
+                {
+                    "date": 1708279039636,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,6 +1,6 @@\n import React, { useState } from \"react\";\r\n-import useHistory from \"../../hooks/useWatchedHistoryStore\";\r\n+import useHistory from \"../../hooks/useHistory\";\r\n import { EyeFilled, EyeOutlined } from \"@ant-design/icons\";\r\n import { useEffect } from \"react/cjs/react.production.min\";\r\n \r\n const Watched = ({ title }) => {\r\n"
+                }
+            ],
+            "date": 1708278008117,
+            "name": "Commit-0",
+            "content": "import React, {useState} from 'react'\r\nimport useUser from '../../hooks/useUser'\r\nimport { EyeFilled, EyeOutlined } from '@ant-design/icons'\r\nimport { useEffect } from 'react/cjs/react.production.min'\r\n\r\nconst Watched = ({title}) => {\r\n  const {isVideoWatched, toggleVideoWatched, watchHistory} = useUser()\r\nconst [watched, setWatched] = useState<boolean>(false)\r\n\r\n    useEffect(() => {\r\n        async function load(){\r\n            setWatched(await isVideoWatched(title))\r\n        }\r\n        load()\r\n    }, [watchHistory, title, isVideoWatched])\r\n\r\n  return (\r\n    <div>{watched ? <EyeFilled /> : <EyeOutlined />}</div>\r\n  )\r\n}\r\n\r\nexport default Watched"
+        }
+    ]
+}

@@ -1,0 +1,30 @@
+{
+    "sourceFile": "app/services/store.ts",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 3,
+            "patches": [
+                {
+                    "date": 1708264447282,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1708270056128,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -46,8 +46,9 @@\n };\r\n \r\n class Store {\r\n   getMovieInfo = async (filePath: string, altTitle: string) => {\r\n+    console.log(altTitle)\r\n     let info: MovieInfo | undefined = undefined;\r\n     try {\r\n       //@ts-ignore\r\n       info = await db.get(altTitle);\r\n"
+                },
+                {
+                    "date": 1708279666628,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -46,9 +46,8 @@\n };\r\n \r\n class Store {\r\n   getMovieInfo = async (filePath: string, altTitle: string) => {\r\n-    console.log(altTitle);\r\n     let info: MovieInfo | undefined = undefined;\r\n     try {\r\n       //@ts-ignore\r\n       info = await db.get(altTitle);\r\n"
+                },
+                {
+                    "date": 1708280690480,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -62,15 +62,13 @@\n \r\n     return info;\r\n   };\r\n \r\n-  getLastFolder = async () => {\r\n-    return await db.get(\"lastFolder\");\r\n-  };\r\n+  getLastFolder = async () =>      await db.get(\"lastFolder\");\r\n+  \r\n \r\n-  saveLastFolder(path: string) {\r\n-    return db.put(\"lastFolder\", path);\r\n-  }\r\n+  saveLastFolder = (path: string)  => db.put(\"lastFolder\", path);\r\n+  \r\n }\r\n \r\n const store = new Store();\r\n \r\n"
+                }
+            ],
+            "date": 1708264447282,
+            "name": "Commit-0",
+            "content": "import { fetchMovieData } from \"./api\";\r\nimport db from \"./db\";\r\n\r\nexport type MovieAudio = {\r\n  codecLongName: string;\r\n  channelLayout: string;\r\n  codecName: string;\r\n  language: string;\r\n};\r\nexport type MovieSubtitle = {\r\n  language: string;\r\n  title: string;\r\n};\r\nexport type MovieInfo = {\r\n  audio: MovieAudio[];\r\n  codecLongName: string;\r\n  codecName: string;\r\n  duration: number;\r\n  filename: string;\r\n  formatLongName: string;\r\n  formatName: string;\r\n  fullpath: string;\r\n  height: number;\r\n  quality: string;\r\n  size: number;\r\n  subtitle: MovieSubtitle[];\r\n  title: string;\r\n  tmdb: {\r\n    adult: boolean;\r\n    backdrop_path: string;\r\n    genre_ids: number[];\r\n    id: number;\r\n    original_language: string;\r\n    original_title: string;\r\n    overview: string;\r\n    popularity: number;\r\n    poster_path: string;\r\n    release_date: string;\r\n    title: string;\r\n    video: boolean;\r\n    vote_average: number;\r\n    vote_count: number;\r\n  };\r\n  width: number;\r\n  year: string;\r\n};\r\n\r\nclass Store {\r\n  getMovieInfo = async (filePath: string, altTitle: string) => {\r\n    let info: MovieInfo | undefined = undefined;\r\n    try {\r\n      //@ts-ignore\r\n      info = await db.get(altTitle);\r\n    } catch (e) {}\r\n\r\n    if (!info) {\r\n      //@ts-ignore\r\n      info = await fetchMovieData(filePath, altTitle);\r\n      //@ts-ignore\r\n      db.put(altTitle, info);\r\n    }\r\n\r\n    return info;\r\n  };\r\n\r\n  getLastFolder = async () => {\r\n    return await db.get(\"lastFolder\");\r\n  };\r\n\r\n  saveLastFolder(path: string) {\r\n    return db.put(\"lastFolder\", path);\r\n  }\r\n}\r\n\r\nconst store = new Store();\r\n\r\nexport default store;\r\n"
+        }
+    ]
+}

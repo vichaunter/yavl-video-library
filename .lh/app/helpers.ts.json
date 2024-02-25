@@ -1,0 +1,18 @@
+{
+    "sourceFile": "app/helpers.ts",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1708264690339,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1708264690339,
+            "name": "Commit-0",
+            "content": "import { readdirSync } from \"fs\";\r\nimport path, { join } from \"path\";\r\n\r\nimport { getCleanName } from \"./tools/file\";\r\nimport isVideoFile from \"./tools/is-video-file\";\r\n\r\n\r\n\r\nexport const filterNoNamedLanguages = (languages) =>\r\n  languages.filter((stream) => stream.language);\r\n\r\n export function listFilesRecursively(folderPath) {\r\n    const files: Record<string, any> = {};\r\n    files.videos = [];\r\n  \r\n    for (const entry of readdirSync(folderPath, { withFileTypes: true })) {\r\n      const fullPath = join(folderPath, entry.name);\r\n      const pathArray = fullPath.split(path.sep);\r\n      const altTitle = getCleanName(pathArray[pathArray.length - 2], true);\r\n  \r\n      if (entry.isDirectory()) {\r\n        const subFolderPath = join(folderPath, entry.name);\r\n        const subFolderFiles = listFilesRecursively(subFolderPath);\r\n        files.videos.push(...subFolderFiles.videos);\r\n      } else if (entry.isFile() && isVideoFile(entry.name)) {\r\n        files.videos.push({ ...entry, fullPath, altTitle });\r\n      }\r\n    }\r\n  \r\n    return files;\r\n  }"
+        }
+    ]
+}

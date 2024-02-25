@@ -1,0 +1,18 @@
+{
+    "sourceFile": "app/components/Audio.tsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1708283264489,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1708283264489,
+            "name": "Commit-0",
+            "content": "import { SoundOutlined } from \"@ant-design/icons\";\r\nimport Flag from \"./Flag\";\r\n\r\nconst Audio = ({ languages }) => {\r\n    return (\r\n      <div className=\"languages audio\">\r\n        <SoundOutlined className=\"icon\" />\r\n        {languages.map((stream, idx) => (\r\n          <Flag\r\n            key={`${stream.language}_${stream.codecName}_${idx}`}\r\n            language={stream.language}\r\n            title={stream.codecName}\r\n          />\r\n        ))}\r\n      </div>\r\n    );\r\n  };\r\n\r\n  export default Audio"
+        }
+    ]
+}

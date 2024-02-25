@@ -1,0 +1,26 @@
+{
+    "sourceFile": "app/hooks/useHistory.ts",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 2,
+            "patches": [
+                {
+                    "date": 1708279039634,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1708279104568,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,9 +2,9 @@\n import db from \"../services/db\";\r\n import { useEffect } from \"react/cjs/react.production.min\";\r\n import { create } from \"zustand\";\r\n \r\n-const useWatchStore = create((set) => ({\r\n+const useWatchStore = create((set, get) => ({\r\n   history: {},\r\n   toggleWatched: async (videoId) => {\r\n     set((state) => {\r\n       const newState = { ...state };\r\n@@ -18,28 +18,29 @@\n \r\n       return newState;\r\n     });\r\n   },\r\n+  isWatched: (videoId) => get().history[videoId],\r\n   replace: (data) => set(data, true),\r\n }));\r\n \r\n const useHistory = () => {\r\n-  const [replace, history, toggleWatched] = useWatchStore((state) => [\r\n+  const [replace, history, toggleWatched,isWatched] = useWatchStore((state) => [\r\n     state.replace,\r\n     state.history,\r\n     state.toggleWatched,\r\n+    state.isWatched\r\n   ]);\r\n \r\n   useEffect(() => {\r\n     db.get(\"watchedHistory\").then((data) => {\r\n       replace(data);\r\n     });\r\n   }, []);\r\n \r\n-  const isVideoWatched = async (videoId: string) => history[videoId];\r\n \r\n   return {\r\n-    isVideoWatched,\r\n+    isWatched,\r\n     toggleWatched,\r\n     history,\r\n   };\r\n };\r\n"
+                },
+                {
+                    "date": 1708279135729,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -23,14 +23,11 @@\n   replace: (data) => set(data, true),\r\n }));\r\n \r\n const useHistory = () => {\r\n-  const [replace, history, toggleWatched, isWatched] = useWatchStore(\r\n+  const [replace] = useWatchStore(\r\n     (state) => [\r\n       state.replace,\r\n-      state.history,\r\n-      state.toggleWatched,\r\n-      state.isWatched,\r\n     ]\r\n   );\r\n \r\n   useEffect(() => {\r\n@@ -39,10 +36,8 @@\n     });\r\n   }, []);\r\n \r\n   return {\r\n-    isWatched,\r\n-    toggleWatched,\r\n     history,\r\n   };\r\n };\r\n \r\n"
+                }
+            ],
+            "date": 1708279039634,
+            "name": "Commit-0",
+            "content": "import { useState } from \"react\";\r\nimport db from \"../services/db\";\r\nimport { useEffect } from \"react/cjs/react.production.min\";\r\nimport { create } from \"zustand\";\r\n\r\nconst useWatchStore = create((set) => ({\r\n  history: {},\r\n  toggleWatched: async (videoId) => {\r\n    set((state) => {\r\n      const newState = { ...state };\r\n\r\n      if (!newState[videoId]) {\r\n        newState[videoId] = true;\r\n      } else {\r\n        newState[videoId] = false;\r\n      }\r\n      db.put(\"seenHistory\", newState);\r\n\r\n      return newState;\r\n    });\r\n  },\r\n  replace: (data) => set( data, true)\r\n}));\r\n\r\nconst useHistory = () => {\r\n  const [replace, history, toggleWatched] = useWatchStore((state) => [state.replace, state.history, state.toggleWatched]);\r\n\r\n  useEffect(() => {\r\n    db.get(\"watchedHistory\").then((data) => {\r\n      replace(data);\r\n    });\r\n  }, []);\r\n\r\n  const isVideoWatched = async (videoId: string) => history[videoId];\r\n\r\n  return {\r\n    isVideoWatched,\r\n    toggleWatched,\r\n    history,\r\n  };\r\n};\r\n\r\nexport default useHistory;\r\n"
+        }
+    ]
+}

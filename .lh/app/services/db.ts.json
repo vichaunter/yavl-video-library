@@ -1,0 +1,26 @@
+{
+    "sourceFile": "app/services/db.ts",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 2,
+            "patches": [
+                {
+                    "date": 1708270012830,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1708270031071,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,5 @@\n import { Level } from \"level\";\r\n \r\n-const db = new Level(\"../db\", { valueEncoding: \"json\" });\r\n+const db = new Level(\"../../db\", { valueEncoding: \"json\" });\r\n \r\n export default db;\r\n"
+                },
+                {
+                    "date": 1708270039320,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,5 @@\n import { Level } from \"level\";\r\n \r\n-const db = new Level(\"../../db\", { valueEncoding: \"json\" });\r\n+const db = new Level(\"../../yavl-db\", { valueEncoding: \"json\" });\r\n \r\n export default db;\r\n"
+                }
+            ],
+            "date": 1708270012830,
+            "name": "Commit-0",
+            "content": "import { Level } from \"level\";\r\n\r\nconst db = new Level(\"../db\", { valueEncoding: \"json\" });\r\n\r\n\r\nexport default db;\r\n"
+        }
+    ]
+}

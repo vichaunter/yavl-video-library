@@ -1,0 +1,26 @@
+{
+    "sourceFile": "app/style.css",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 2,
+            "patches": [
+                {
+                    "date": 1708269545358,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1708269655058,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,8 +8,9 @@\n }\r\n \r\n .folder-breadcrumbs {\r\n   -webkit-app-region: drag;\r\n+  pointer: drag;\r\n }\r\n \r\n .folder-breadcrumbs span {\r\n   display: inline-block;\r\n"
+                },
+                {
+                    "date": 1708269719758,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,9 +8,9 @@\n }\r\n \r\n .folder-breadcrumbs {\r\n   -webkit-app-region: drag;\r\n-  pointer: drag;\r\n+  cursor: grab;\r\n }\r\n \r\n .folder-breadcrumbs span {\r\n   display: inline-block;\r\n"
+                }
+            ],
+            "date": 1708269545358,
+            "name": "Commit-0",
+            "content": "body {\r\n  margin: 0;\r\n}\r\n\r\n.ant-layout-content {\r\n  display: flex;\r\n  flex-direction: column;\r\n}\r\n\r\n.folder-breadcrumbs {\r\n  -webkit-app-region: drag;\r\n}\r\n.folder-breadcrumbs span {\r\n  display: inline-block;\r\n  padding: 10px 2px;\r\n  cursor: pointer;\r\n  user-select: none;\r\n}\r\n\r\n.folder-breadcrumbs span:hover {\r\n  background-color: #c6ebf9;\r\n}\r\n\r\n.file-browser > .listing {\r\n  display: flex;\r\n  flex-direction: row;\r\n  flex-wrap: wrap;\r\n}\r\n\r\n.file-item {\r\n  width: 110px;\r\n}\r\n\r\n.file-item .inner {\r\n  display: flex;\r\n  flex-direction: column;\r\n  align-items: center;\r\n  border-radius: 3px;\r\n  padding: 10px;\r\n}\r\n\r\n.file-item .inner > *:first-child {\r\n  font-size: 30px;\r\n}\r\n\r\n.file-item .inner span.filename {\r\n  text-align: center;\r\n  display: block;\r\n  font-size: 13px;\r\n  word-break: break-word;\r\n  user-select: none;\r\n}\r\n\r\n.file-item:hover .inner {\r\n  background-color: #c6ebf9;\r\n}\r\n\r\n.file-item.video-item {\r\n  width: 200px;\r\n}\r\n\r\n.file-item.video-item .inner {\r\n  padding: 10px;\r\n}\r\n\r\n.file-item.video-item .cover {\r\n  width: 100px;\r\n  height: 150px;\r\n  background: #cdcdcd;\r\n  border-radius: 3px;\r\n}\r\n\r\n.file-item.video-item .tags img {\r\n  height: 20px;\r\n}\r\n\r\n.file-item.video-item .tags img + img {\r\n  margin-left: 5px;\r\n}\r\n\r\n.file-item.video-item .languages span:first-child {\r\n  margin-right: 5px;\r\n}\r\n"
+        }
+    ]
+}

@@ -1,0 +1,30 @@
+{
+    "sourceFile": "main.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 3,
+            "patches": [
+                {
+                    "date": 1708265149704,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1708269454322,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,8 +11,9 @@\n       nodeIntegration: true,\r\n       contextIsolation: false,\r\n       enableRemoteModule: true,\r\n     },\r\n+    frame: false\r\n   });\r\n \r\n   if (process.env.NODE_ENV === \"development\") {\r\n     win.loadFile(\"./dist/index.html\");\r\n"
+                },
+                {
+                    "date": 1708279720993,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,9 +11,9 @@\n       nodeIntegration: true,\r\n       contextIsolation: false,\r\n       enableRemoteModule: true,\r\n     },\r\n-    frame: false,\r\n+    skipTaskbar: true\r\n   });\r\n \r\n   if (process.env.NODE_ENV === \"development\") {\r\n     win.loadFile(\"./dist/index.html\");\r\n"
+                },
+                {
+                    "date": 1708286539544,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -36,8 +36,12 @@\n       // Use the selectedPath as needed, for example, display it in the renderer process\r\n       event.sender.send(\"selected-directory\", selectedPath);\r\n     }\r\n   });\r\n+  \r\n+  ipcMain.handle('get-app-path', (event, pathType) => {\r\n+    return app.getPath(pathType);\r\n+  });\r\n }\r\n \r\n app.whenReady().then(createWindow);\r\n \r\n"
+                }
+            ],
+            "date": 1708265149704,
+            "name": "Commit-0",
+            "content": "const { app, BrowserWindow, ipcMain, shell, dialog } = require(\"electron\");\r\ntry {\r\n  require(\"electron-reloader\")(module);\r\n} catch (_) {}\r\n\r\nfunction createWindow() {\r\n  const win = new BrowserWindow({\r\n    width: 1200,\r\n    height: 900,\r\n    webPreferences: {\r\n      nodeIntegration: true,\r\n      contextIsolation: false,\r\n      enableRemoteModule: true,\r\n    },\r\n  });\r\n\r\n  if (process.env.NODE_ENV === \"development\") {\r\n    win.loadFile(\"./dist/index.html\");\r\n  } else {\r\n    win.loadFile(\"./dist/index.html\");\r\n  }\r\n\r\n  ipcMain.on(\"open-file\", (event, filePath) => {\r\n    shell.openPath(filePath);\r\n  });\r\n\r\n  ipcMain.on(\"open-directory\", async (event) => {\r\n    const result = await dialog.showOpenDialog(win, {\r\n      properties: [\"openDirectory\"],\r\n    });\r\n\r\n    if (!result.canceled && result.filePaths.length > 0) {\r\n      const selectedPath = result.filePaths[0];\r\n\r\n      // Use the selectedPath as needed, for example, display it in the renderer process\r\n      event.sender.send(\"selected-directory\", selectedPath);\r\n    }\r\n  });\r\n}\r\n\r\napp.whenReady().then(createWindow);\r\n\r\napp.on(\"window-all-closed\", () => {\r\n  // if (process.platform !== 'darwin') {\r\n  app.quit();\r\n  // }\r\n});\r\n"
+        }
+    ]
+}

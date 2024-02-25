@@ -1,0 +1,22 @@
+{
+    "sourceFile": "app/hooks/useUser.ts",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 1,
+            "patches": [
+                {
+                    "date": 1708277673304,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1708277982614,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -27,8 +27,9 @@\n \r\n   return {\r\n     isVideoWatched,\r\n     toggleVideoWatched,\r\n+    watchHistory\r\n   };\r\n };\r\n \r\n export default useUser;\r\n"
+                }
+            ],
+            "date": 1708277673304,
+            "name": "Commit-0",
+            "content": "import {useState} from 'react'\r\nimport db from \"../services/db\"\r\nimport { useEffect } from 'react/cjs/react.production.min'\r\n\r\nconst useUser = () => {\r\n\r\n    const [watchHistory, setWatchHistory] = useState()\r\n\r\n    useEffect(() => {\r\n        db.get('watchedHistory').then(data => {\r\n            setWatchHistory(data)\r\n        })\r\n    }, [])\r\n\r\n    const isVideoWatched = async (videoId: string) => watchHistory[videoId]\r\n    \r\n\r\n    const toggleVideoWatched = async (videoId: string) => {\r\n        \r\n\r\n        if(watchHistory[videoId]){\r\n            const newWatchHistory = {...watchHistory, [videoId]: !watchHistory[videoId]}\r\n            db.put('seenHistory', newWatchHistory)\r\n            \r\n            setWatchHistory(newWatchHistory)\r\n        }\r\n    }\r\n\r\n    return {\r\n        isVideoWatched,\r\n        toggleVideoWatched\r\n    }\r\n}\r\n\r\nexport default useUser"
+        }
+    ]
+}

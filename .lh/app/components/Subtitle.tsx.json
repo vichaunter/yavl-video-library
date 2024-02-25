@@ -1,0 +1,22 @@
+{
+    "sourceFile": "app/components/Subtitle.tsx",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 1,
+            "patches": [
+                {
+                    "date": 1708283226206,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1708283394399,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,4 +1,5 @@\n+import React from \"react\";\r\n import { MessageOutlined } from \"@ant-design/icons\";\r\n import Flag from \"./Flag\";\r\n \r\n const Subtitle = ({ languages }) => (\r\n"
+                }
+            ],
+            "date": 1708283226206,
+            "name": "Commit-0",
+            "content": "import { MessageOutlined } from \"@ant-design/icons\";\r\nimport Flag from \"./Flag\";\r\n\r\nconst Subtitle = ({ languages }) => (\r\n    <div className=\"languages subtitle\">\r\n      <MessageOutlined className=\"icon\" />\r\n      {languages.map((stream, idx) => (\r\n        <Flag\r\n          key={`${stream.language}_${stream.title}_${idx}`}\r\n          language={stream.language}\r\n          title={stream.title}\r\n        />\r\n      ))}\r\n    </div>\r\n  );\r\n\r\n  \r\n  export default Subtitle"
+        }
+    ]
+}
