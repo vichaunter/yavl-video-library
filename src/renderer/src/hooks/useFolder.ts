@@ -1,7 +1,6 @@
 import { create } from 'zustand';
-import api from '../api/apiMedia';
+import { api } from '../api/apiMedia';
 import { useEffect } from 'react';
-import db from '../../../main/services/db';
 
 export type FolderStore = {
   current: string;
@@ -24,6 +23,7 @@ const useFolder = () => {
   useEffect(() => {
     if (!current) {
       api.getConfig().then((res) => {
+        if (!res) return;
         res.selectedPath && setCurrent(res.selectedPath);
       });
     }

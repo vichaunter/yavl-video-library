@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { FavoriteList } from '../../../main/handlers/favoriteHandlers';
-import api from '../api/apiMedia';
+import { api } from '../api/apiMedia';
 
 interface FavoriteStore {
   favorites: FavoriteList;

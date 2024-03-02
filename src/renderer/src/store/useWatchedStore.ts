@@ -1,29 +1,30 @@
-import { create, useStore } from 'zustand';
-import api from '../api/apiMedia';
-import { WatchedList } from '../../../main/handlers/watchedHandlers';
+import { create } from 'zustand';
+import { TraktWatched } from '../../../main/handlers/traktHandler';
+import { api } from '../api/apiMedia';
 
 interface WatchedStore {
-  watched: WatchedList;
+  watched: Record<number, TraktWatched>;
   loading: boolean;
   load: () => void;
-  toggleWatched: (id: string) => void;
-  isWatched: (id: string) => boolean;
+  toggleWatched: (id: number) => void;
+  isWatched: (id: number) => TraktWatched;
 }
 
 const useWatchedStore = create<WatchedStore>((set, get) => ({
   watched: {},
   loading: true,
   load: async () => {
-    const watched = await api.getWatched();
+    const watched = await api.getTraktWatched();
     set({ watched, loading: false });
   },
-  toggleWatched: async (id: string) => {
-    const watched = await api.toggleWatched(id);
+  toggleWatched: async (id: number) => {
+    const watched = await api.toggleTraktWatched(id);
     set({ watched });
   },
   isWatched: (id) => {
     const list = get().watched;
-    return !!list[id];
+
+    return list[id];
   },
 }));
 
