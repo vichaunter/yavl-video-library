@@ -21,6 +21,7 @@ const useFilesStore = create<UseFilesStore>((set, get) => ({
       const info = await api.getMediaInfo(file.fullPath);
 
       if (!info) continue;
+      //TODO: fix potential duplicates if the same file is in multiple folders
       set({
         files: [...get().files, info],
       });

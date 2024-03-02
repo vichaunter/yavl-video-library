@@ -73,8 +73,6 @@ const createWindow = async () => {
     y = displays[1].bounds.y + 50;
   }
 
-  console.log({ displays });
-
   mainWindow = new BrowserWindow({
     show: false,
     width: 1920,

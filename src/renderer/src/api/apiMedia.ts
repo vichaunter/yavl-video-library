@@ -1,4 +1,5 @@
 import { Api, ApiResponse } from '../../../main/api/api';
+import { TraktAuthorization } from '../../../main/api/trakt';
 import { FavoriteList } from '../../../main/handlers/favoriteHandlers';
 import { Config } from '../../../main/handlers/getConfigHandler';
 import { File } from '../../../main/handlers/listFilesHandler';
@@ -87,6 +88,11 @@ class ApiV2 {
   }
   async openExternalLink(url: string) {
     const res = await request<string>(winApi.openExternalLink(url));
+
+    return res?.data;
+  }
+  async authorizeTrakt() {
+    const res = await request<TraktAuthorization>(winApi.authorizeTrakt());
 
     return res?.data;
   }

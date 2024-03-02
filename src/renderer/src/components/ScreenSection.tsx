@@ -4,13 +4,14 @@ import styled from 'styled-components';
 const Styled = styled.div``;
 
 type Props = {
-  title?: string;
-  children: ReactNode;
+  title?: string | ReactNode;
+  children: any;
+  className?: string;
 };
-const ScreenSection = ({ title, children }: Props) => {
+const ScreenSection = ({ title, children, className }: Props) => {
   return (
-    <Styled>
-      {title && <h2>{title}</h2>}
+    <Styled className={className}>
+      {typeof title === 'string' ? <h2>{title}</h2> : title}
       <div className="container-fluid">{children}</div>
     </Styled>
   );

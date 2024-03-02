@@ -25,6 +25,7 @@ import {
   toggleWatchedHandler,
 } from '../handlers/watchedHandlers';
 import MediaModel from '../models/MovieModel';
+import trakt, { TraktAuthorization } from './trakt';
 
 export type ApiResponse<T> = {
   status: number;
@@ -109,6 +110,12 @@ export class Api {
     openExternalLinkHandler(url);
 
     return send(url);
+  };
+
+  authorizeTrakt: ApiHandler<void, TraktAuthorization> = async () => {
+    const result = await trakt.authorize();
+
+    return send(result);
   };
 }
 

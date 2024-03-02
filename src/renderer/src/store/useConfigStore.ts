@@ -16,6 +16,7 @@ const useConfigStore = create<ConfigStore>((set, get) => ({
   },
   loading: true,
   load: async () => {
+    set({ loading: true });
     const config = await api.getConfig();
     set({ config, loading: false });
   },

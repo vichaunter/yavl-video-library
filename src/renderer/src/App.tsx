@@ -15,8 +15,8 @@ export default function App() {
   return (
     <Router>
       <Routes>
+        <Route path="/config" element={<ConfigScreen />} />
         <Route path="/" element={<HomeScreen />} />
-        <Route path="/" element={<ConfigScreen />} />
       </Routes>
     </Router>
   );

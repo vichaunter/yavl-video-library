@@ -1,24 +1,44 @@
 import { TraktWatched } from '../handlers/traktHandler';
 import db from '../services/db';
+
+export type TraktAuthorization = {
+  device_code: string;
+  user_code: string;
+  verification_url: string;
+  expires_in: number;
+  interval: number;
+};
+
+export type TraktAuthorizationResponse = {
+  access_token: string;
+  token_type: string;
+  expires_in: number;
+  refresh_token: string;
+  scope: string;
+  created_at: number;
+};
+
 export interface TraktConfig {
   username?: string;
   clientId?: string;
   clientSecret?: string;
   accessToken?: string;
+  refreshToken?: string;
 }
 
 class Trakt {
+  appsUrl = 'https://trakt.tv/oauth/applications';
   baseUrl = 'https://api.trakt.tv';
   username?: string; // Replace with your Trakt.tv username
   clientId?: string;
   clientSecret?: string;
   accessToken?: string;
+  refreshToken?: string;
   polling = false;
 
   constructor() {
     try {
       db.get('config').then((config) => {
-        console.log(config);
         if (
           !config ||
           !config.trakt ||
@@ -31,30 +51,46 @@ class Trakt {
         this.clientId = config.trakt.clientId;
         this.clientSecret = config.trakt.clientSecret;
         this.accessToken = config.trakt.accessToken;
-
-        this.authorize();
+        this.refreshToken = config.trakt.refreshToken;
       });
     } catch (e) {
       console.warn('Remember to configure Trakt from UI to use it');
     }
+
+    //TODO: add refresh token case this.refreshAuthToken()
   }
 
   async configure(config: TraktConfig) {
-    return db.update('config', 'trakt', config);
+    const savedConfig = await db.get('config');
+    const newConfig = {
+      ...savedConfig?.trakt,
+      ...config,
+    };
+
+    return db.update('config', 'trakt', newConfig);
   }
 
-  private post = async (endpoint: string, body: any) => {
+  private post = async (
+    endpoint: string,
+    body: any,
+    sendAuthHeaders: boolean = true,
+  ) => {
+    const headers: HeadersInit = {
+      'Content-Type': 'application/json',
+    };
+    if (sendAuthHeaders) {
+      headers['Authorization'] = `Bearer ${this.accessToken}`;
+      headers['trakt-api-key'] = `${this.clientId}`;
+      headers['trakt-api-version'] = '2';
+    }
+
     return await fetch(`${this.baseUrl}${endpoint}`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.accessToken}`,
-        'trakt-api-key': `${this.clientId}`,
-        'trakt-api-version': '2',
-      },
+      headers,
       body: JSON.stringify(body),
     });
   };
+
   private fetch = async (endpoint: string) =>
     await fetch(`${this.baseUrl}${endpoint}`, {
       headers: {
@@ -128,21 +164,46 @@ class Trakt {
     }
   };
 
+  private async refreshAuthToken() {
+    if (!this.refreshToken) return;
+
+    const tokenUrl = `${this.baseUrl}/oauth/token`;
+    const body = {
+      refresh_token: this.refreshToken,
+      client_id: this.clientId,
+      client_secret: this.clientSecret,
+      redirect_uri: 'urn:ietf:wg:oauth:2.0:oob',
+      grant_type: 'refresh_token',
+    };
+
+    const response = await this.post(tokenUrl, body, false);
+
+    if (response?.status === 200) {
+      const data = await response.json();
+      await this.configure({
+        accessToken: data.access_token,
+        refreshToken: data.refresh_token,
+      });
+      this.accessToken = data.access_token;
+      this.refreshToken = data.refresh_token;
+    }
+  }
+
   async authorize() {
     const codeUrl = `${this.baseUrl}/oauth/device/code`;
-    const response = await fetch(codeUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
+    const response = await this.post(
+      codeUrl,
+      {
         client_id: this.clientId,
-      }),
-    });
+      },
+      false,
+    );
 
     const data = await response?.json();
 
     this.pollAuth(data.device_code, data.interval * 1000);
+
+    return data;
   }
 
   private async pollAuth(code: string, interval: number) {
@@ -150,12 +211,10 @@ class Trakt {
       this.polling = true;
       setTimeout(async () => {
         const response = await this.fetchAuth(code);
-        if (response) {
-          const config = await db.get('config');
-
+        if (response?.access_token) {
           await this.configure({
-            ...config?.trakt,
             accessToken: response.access_token,
+            refreshToken: response.refresh_token,
           });
 
           this.accessToken = response.access_token;
@@ -178,13 +237,7 @@ class Trakt {
         client_secret: this.clientSecret,
       };
 
-      const response = await fetch(tokenUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(body),
-      });
+      const response = await this.post(tokenUrl, body, false);
 
       return response.status === 200 ? await response.json() : undefined;
     } catch (error) {

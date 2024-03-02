@@ -1,3 +1,4 @@
+import { FaGear } from 'react-icons/fa6';
 import { orderBy } from 'lodash';
 import { useMemo, useState } from 'react';
 import {
@@ -14,6 +15,7 @@ import MediaItem from '../components/MediaItem';
 import useFiles from '../hooks/useFiles';
 import useFolder from '../hooks/useFolder';
 import { ascDesc } from '../helpers';
+import { Link } from 'react-router-dom';
 
 const Styled = styled.div`
   .header {
@@ -95,6 +97,9 @@ const HomeScreen = () => {
             {filter.watched ? <FaEye /> : <FaEyeSlash />}
           </button>
         </div>
+        <Link to="/config" className="link">
+          <FaGear />
+        </Link>
       </div>
       <div className="grid-container">
         {sortedItems?.map((file) => {

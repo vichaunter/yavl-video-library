@@ -50,7 +50,6 @@ export const toggleTraktWatchedHandler = async (
   try {
     if (item?.action === 'watch') {
       response = await trakt.removeFromHistory(id);
-      console.log('remove', id, response);
     } else {
       response = await trakt.addToHistory(id);
     }
