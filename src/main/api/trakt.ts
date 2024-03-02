@@ -167,7 +167,6 @@ class Trakt {
   private async refreshAuthToken() {
     if (!this.refreshToken) return;
 
-    const tokenUrl = `${this.baseUrl}/oauth/token`;
     const body = {
       refresh_token: this.refreshToken,
       client_id: this.clientId,
@@ -176,7 +175,7 @@ class Trakt {
       grant_type: 'refresh_token',
     };
 
-    const response = await this.post(tokenUrl, body, false);
+    const response = await this.post('/oauth/token', body, false);
 
     if (response?.status === 200) {
       const data = await response.json();
@@ -190,9 +189,8 @@ class Trakt {
   }
 
   async authorize() {
-    const codeUrl = `${this.baseUrl}/oauth/device/code`;
     const response = await this.post(
-      codeUrl,
+      '/oauth/device/code',
       {
         client_id: this.clientId,
       },
@@ -229,15 +227,13 @@ class Trakt {
 
   private async fetchAuth(code: string) {
     try {
-      const tokenUrl = `${this.baseUrl}/oauth/device/token`;
-
       const body = {
         code: code,
         client_id: this.clientId,
         client_secret: this.clientSecret,
       };
 
-      const response = await this.post(tokenUrl, body, false);
+      const response = await this.post('/oauth/device/token', body, false);
 
       return response.status === 200 ? await response.json() : undefined;
     } catch (error) {
