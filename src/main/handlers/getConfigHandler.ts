@@ -1,24 +1,35 @@
-import { send } from '.';
+import { TraktConfig } from '../api/trakt';
 import db from '../services/db';
-import { ApiConfigResponse } from '../types';
 
-type Props = {
-  args: {
-    folder: string;
-  };
+export type Config = {
+  trakt?: TraktConfig;
+  selectedPath?: string;
 };
-const getConfigHandler = async ({ args }: Props) => {
-  const config: ApiConfigResponse['data'] = {
-    selectedPath: '',
-  };
 
+export const getConfigHandler = async (): Promise<Config> => {
   try {
-    config.selectedPath = await db.get('selectedPath');
+    return (await db.get('config')) as Config;
   } catch (e) {
     console.log(e);
   }
 
-  return send(config);
+  return {};
 };
 
-export default getConfigHandler;
+export const setConfigHandler = async (config: Config): Promise<Config> => {
+  let currentConfig = {};
+  try {
+    currentConfig = (await db.get('config')) as unknown as Config;
+  } catch (err) {
+    console.log(err);
+  }
+
+  const newConfig = {
+    ...currentConfig,
+    ...config,
+  };
+
+  await db.put('config', newConfig as any);
+
+  return newConfig;
+};

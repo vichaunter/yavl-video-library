@@ -1,40 +1,28 @@
-import { HandlerRequest, HandlerResponse, send } from '.';
-import db, { DB_TABLES } from '../services/db';
+import db from '../services/db';
 
 export type FavoriteList = {
   [key: string]: boolean;
 };
-export type FavoritesResponse = HandlerResponse<FavoriteList>;
 
 const getFavorites = async (): Promise<FavoriteList> => {
   let favorites: Record<string, boolean> = {};
 
   try {
-    favorites = (await db.get(DB_TABLES.favorites)) as any;
+    favorites = (await db.get('favorites')) as any;
   } catch (e) {
-    await db.put(DB_TABLES.favorites, {} as any);
+    await db.put('favorites', {} as any);
   }
 
   return favorites;
 };
 
-export const getFavoritesHandler = async () => send(await getFavorites());
+export const getFavoritesHandler = async () => await getFavorites();
 
-export type ToggleFavoriteArgs = {
-  id: string;
-};
-
-export type ToggleFavoriteHandler = (
-  request: HandlerRequest<ToggleFavoriteArgs>,
-) => Promise<string>;
-
-export const toggleFavoriteHandler: ToggleFavoriteHandler = async (request) => {
-  const { id } = request.args;
-
+export const toggleFavoriteHandler = async (id: string) => {
   const favorites = await getFavorites();
   favorites[id] = !favorites[id];
 
-  await db.put(DB_TABLES.favorites, favorites as any);
+  await db.put('favorites', favorites as any);
 
-  return send(favorites);
+  return favorites;
 };

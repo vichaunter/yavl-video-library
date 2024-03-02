@@ -1,18 +1,18 @@
-import { BrowserWindow, dialog } from 'electron';
-import { send } from '.';
+import { dialog } from 'electron';
+import { mainWindow } from '../main';
 import db from '../services/db';
 
-const openDirectoryHandler = async ({ window }: { window: BrowserWindow }) => {
-  const result = await dialog.showOpenDialog(window, {
+const openDirectoryHandler = async (): Promise<string | undefined> => {
+  const result = await dialog.showOpenDialog(mainWindow as any, {
     properties: ['openDirectory'],
   });
 
   if (!result.canceled && result.filePaths.length > 0) {
     const selectedPath = result.filePaths[0];
 
-    db.put('selectedPath', selectedPath);
+    db.update('config', 'selectedPath', selectedPath);
 
-    return send(selectedPath);
+    return selectedPath;
   }
 };
 

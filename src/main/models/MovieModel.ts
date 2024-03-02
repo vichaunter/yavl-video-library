@@ -4,6 +4,7 @@ import search, { TMDBQueue } from '../api/tmdb';
 import { getCleanName } from '../helpers';
 import db from '../services/db';
 import { ffmpegSync } from '../tools/ffprobe';
+import { TraktWatched } from '../handlers/traktHandler';
 
 interface TMDB {
   adult: boolean;
@@ -24,7 +25,7 @@ interface TMDB {
 
 interface MediaUser {
   favorite: boolean;
-  watched: boolean;
+  watched?: TraktWatched;
 }
 
 interface AudioInfo {
@@ -105,14 +106,14 @@ class MediaModel {
   private async loadDbInfo() {
     let dbInfo;
     try {
-      dbInfo = (await db.get(this.id)) as any;
+      dbInfo = (await db.get('media'))?.[this.id];
     } catch (e) {
-      await db.del(this.id);
+      await db.del('media');
     }
 
-    this.tmdb = dbInfo?.tmdb ?? {};
-    this.user = dbInfo?.user ?? {};
-    this.fileInfo = dbInfo?.fileInfo ?? {};
+    this.tmdb = dbInfo?.tmdb;
+    this.user = dbInfo?.user;
+    this.fileInfo = dbInfo?.fileInfo;
 
     return this;
   }
@@ -133,11 +134,7 @@ class MediaModel {
   }
 
   async persist() {
-    await db.put(this.id, {
-      tmdb: this.tmdb,
-      user: this.user,
-      fileInfo: this.fileInfo,
-    } as any);
+    await db.update('media', this.id, this);
 
     return this;
   }

@@ -8,15 +8,14 @@
  * When running `npm run build` or `npm run build:main`, this file is compiled to
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
-import { BrowserWindow, app, ipcMain, shell } from 'electron';
+import { BrowserWindow, app, ipcMain, shell, screen } from 'electron';
 import log from 'electron-log';
 import { autoUpdater } from 'electron-updater';
 import path from 'path';
-import { HANDLERS } from './constants';
-import handlers from './handlers';
+import api from './api/api';
 import MenuBuilder from './menu';
-import { HandlersType } from './types';
 import { resolveHtmlPath } from './util';
+import { apiKeys } from '../generated/apiKeys';
 
 class AppUpdater {
   constructor() {
@@ -26,7 +25,7 @@ class AppUpdater {
   }
 }
 
-let mainWindow: BrowserWindow | null = null;
+export let mainWindow: BrowserWindow | null = null;
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -66,10 +65,23 @@ const createWindow = async () => {
     return path.join(RESOURCES_PATH, ...paths);
   };
 
+  let x;
+  let y;
+  const displays = screen.getAllDisplays();
+  if (displays[1]) {
+    x = displays[1].bounds.x + 50;
+    y = displays[1].bounds.y + 50;
+  }
+
+  console.log({ displays });
+
   mainWindow = new BrowserWindow({
     show: false,
-    width: 1024,
-    height: 728,
+    width: 1920,
+    height: 1080,
+    x,
+    y,
+    alwaysOnTop: isDebug,
     icon: getAssetPath('icon.png'),
     webPreferences: {
       preload: app.isPackaged
@@ -104,18 +116,15 @@ const createWindow = async () => {
     return { action: 'deny' };
   });
 
-  // Map all handlers, remember to add them to handlers/index and to the HANDLERS
-  for (let key in HANDLERS) {
-    ipcMain.handle(HANDLERS[key as HandlersType], async (event, args) => {
-      return await handlers[key as HandlersType]({
-        event,
-        args,
-        window: mainWindow as BrowserWindow,
-      });
+  apiKeys.forEach((key) => {
+    ipcMain.handle(`api-${key}`, async (event, args) => {
+      //@ts-ignore
+      return await api[key](args, event);
     });
-  }
+  });
 
-  mainWindow.webContents.openDevTools();
+  // devTools for production if needed
+  // mainWindow.webContents.openDevTools();
 
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line

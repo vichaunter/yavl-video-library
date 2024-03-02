@@ -1,10 +1,11 @@
-import { HandlerRequest, HandlerResponse, send } from '.';
 import db from '../services/db';
 
 export type WatchedList = {
-  [key: string]: boolean;
+  [key: string | number]: boolean;
 };
-export type WatchedResponse = HandlerResponse<WatchedList>;
+
+const saveWatched = async (watched: WatchedList) =>
+  await db.put('watched', {} as any);
 
 const getWatched = async (): Promise<WatchedList> => {
   let watched: Record<string, boolean> = {};
@@ -12,29 +13,21 @@ const getWatched = async (): Promise<WatchedList> => {
   try {
     watched = (await db.get('watched')) as any;
   } catch (e) {
-    await db.put('watched', {} as any);
+    await saveWatched({});
   }
 
   return watched;
 };
 
-export const getWatchedHandler = async () => send(await getWatched());
+export const getWatchedHandler = async () => await getWatched();
 
-export type ToggleWatchedArgs = {
-  id: string;
-};
-
-export type ToggleWatchedHandler = (
-  request: HandlerRequest<ToggleWatchedArgs>,
-) => Promise<string>;
-
-export const toggleWatchedHandler: ToggleWatchedHandler = async (request) => {
-  const { id } = request.args;
-
+export const toggleWatchedHandler = async (
+  id: string | number,
+): Promise<WatchedList> => {
   const watched = await getWatched();
   watched[id] = !watched[id];
 
-  await db.put('watched', watched as any);
+  await saveWatched(watched);
 
-  return send(watched);
+  return watched;
 };

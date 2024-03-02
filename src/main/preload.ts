@@ -1,14 +1,11 @@
 // Disable no-unused-vars, broken for spread args
 /* eslint no-unused-vars: off */
 import { contextBridge, ipcRenderer } from 'electron';
-import { HANDLERS } from './constants';
-import { Api, HandlersType } from './types';
+import { apiKeys } from '../generated/apiKeys';
 
-const safeApi: Api = {} as Api;
-Object.keys(HANDLERS).forEach((key) => {
+const api = {};
+apiKeys.forEach((key) => {
   //@ts-ignore
-  safeApi[key] = (args: any) =>
-    ipcRenderer.invoke(HANDLERS[key as HandlersType], args);
+  api[key] = (args: any) => ipcRenderer.invoke(`api-${key}`, args);
 });
-
-contextBridge.exposeInMainWorld('api', safeApi as Api);
+contextBridge.exposeInMainWorld('api', api);
