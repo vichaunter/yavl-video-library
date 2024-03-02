@@ -1,21 +1,23 @@
-import { FC, useEffect, useState } from 'react';
-import api from '../api/apiMedia';
+import { default as classNames, default as cn } from 'classnames';
+import { FC, useState } from 'react';
 import styled from 'styled-components';
-import MediaItemFooter from './MediaItem/MediaItemFooter';
-import useWatchedStore from '../store/useWatchedStore';
-import cn from 'classnames';
 import MediaModel from '../../../main/models/MovieModel';
+import MediaItemFooter from './MediaItem/MediaItemFooter';
 
 const StyledMedia = styled.div`
   width: 100%;
   height: 100%;
+  overflow: hidden;
   &:hover {
     transition: all cubic-bezier(0.075, 0.82, 0.165, 1) 0.5s;
     z-index: 100;
     box-shadow: #777;
     transform: translateZ(10px);
-    box-shadow: 0px 0px 20px 5px rgba(255, 255, 255, 0.2);
-    transform: translateY(-5px);
+    box-shadow: 0px 0px 20px 5px rgba(0, 0, 0, 0.5);
+    .background {
+      transition: all cubic-bezier(0.075, 0.82, 0.165, 1) 0.5s;
+      transform: scale(1.1);
+    }
   }
 
   .content {
@@ -28,6 +30,7 @@ const StyledMedia = styled.div`
     }
     .info,
     .background {
+      background-position: center center;
       position: absolute;
       width: 100%;
       height: 100%;
@@ -57,42 +60,61 @@ const StyledMedia = styled.div`
     }
   }
 `;
+const StyledDescription = styled.div`
+  opacity: 0;
+  position: fixed;
+  bottom: 0;
+  z-index: -1;
+  left: 0;
+  min-height: 250px;
+  width: 100vw;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  font-size: 1rem;
+  font-weight: 400;
+  padding: 1rem;
+  box-shadow: 0px 0px 20px 15px rgba(0, 0, 0, 0.5);
+  transition: all cubic-bezier(0.075, 0.82, 0.165, 1) 0.5s;
+  &.active {
+    opacity: 1;
+    z-index: 300;
+  }
+`;
 
 type Props = {
-  fullPath: string;
-  className: string;
-  fileName: string;
+  item: MediaModel;
+  className?: string;
 };
-const MediaItem: FC<Props> = ({ fullPath, fileName, className }) => {
-  const [item, setItem] = useState<MediaModel>();
-  const [isWatched] = useWatchedStore((state) => [state.isWatched]);
-
-  useEffect(() => {
-    fetchInfo();
-  }, [fullPath]);
-
-  const fetchInfo = async () => {
-    const media = await api.getMediaInfo({ fullPath });
-    media && setItem(media);
-  };
-
+const MediaItem: FC<Props> = ({ item, className }) => {
+  const [active, setActive] = useState(false);
   if (!item?.id || !item?.tmdb)
     return <div className={className}>Loading...</div>;
 
-  const watched = isWatched(item.id);
+  const title = item.tmdb.title ?? item.id ?? item.fileInfo?.fileName;
+
   return (
-    <StyledMedia className={className}>
-      <div className={cn('content', { watched })}>
-        <div
-          className="background"
-          style={{ backgroundImage: `url(${item.tmdb.backdrop_path})` }}
-        />
-        <div className="info">
-          <div className="title">{fileName}</div>
-          <MediaItemFooter item={item} watched={watched} />
+    <>
+      <StyledMedia
+        className={className}
+        onMouseEnter={() => setActive(true)}
+        onMouseLeave={() => setActive(false)}
+      >
+        <div className={cn('content', { watched: item.user?.watched })}>
+          <div
+            className="background"
+            style={{ backgroundImage: `url(${item.tmdb.backdrop_path})` }}
+          />
+          <div className="info">
+            <div className="title">{title}</div>
+            <MediaItemFooter item={item} watched={!!item.user?.watched} />
+          </div>
         </div>
-      </div>
-    </StyledMedia>
+      </StyledMedia>
+      <StyledDescription className={classNames({ active })}>
+        <h2>{item.fileInfo?.fileName}</h2>
+        {item.tmdb.overview}
+      </StyledDescription>
+    </>
   );
 };
 

@@ -5,7 +5,7 @@ import cn from 'classnames';
 import useFavoriteStore from '../../store/useFavoriteStore';
 import useWatchedStore from '../../store/useWatchedStore';
 import MediaModel from '../../../../main/models/MovieModel';
-import api from '../../api/apiMedia';
+import { api } from '../../api/apiMedia';
 
 const Styled = styled.div`
   height: 40px;
@@ -23,32 +23,35 @@ const Styled = styled.div`
     height: 100%;
     width: 40px;
     transition: all cubic-bezier(0.075, 0.82, 0.165, 1) 0.5s;
+    &:hover {
+      color: white;
+    }
   }
 
   .watch {
     color: purple;
-    &.watched,
-    &:hover {
+
+    &.watched {
       color: white;
       background-color: purple;
       &:hover {
+        color: black;
       }
     }
   }
   .favorite {
     color: #e85d04;
-
-    &.saved,
-    &:hover {
+    &.saved {
       color: white;
       background-color: #e85d04;
+      &:hover {
+        color: black;
+      }
     }
   }
   .play {
     color: #aaa;
-
     &:hover {
-      color: white;
       background-color: #777;
     }
   }
@@ -69,12 +72,14 @@ const MediaItemFooter: FC<Props> = ({ item, watched }) => {
     <Styled>
       <div
         className={cn('item', 'watch', { watched })}
-        onClick={() => toggleWatched(item.id)}
+        onClick={() => item.tmdb?.id && toggleWatched(item.tmdb?.id)}
       >
         <FaCheck />
       </div>{' '}
       <div
-        className={cn('item', 'favorite', { saved: isFavorite(item.id) })}
+        className={cn('item', 'favorite', {
+          saved: isFavorite(item.id),
+        })}
         onClick={() => toggleFavorite(item.id)}
       >
         <FaStar />
