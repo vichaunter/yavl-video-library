@@ -1,27 +1,10 @@
-import path from 'path';
 import fs from 'fs';
-import search, { TMDBQueue } from '../api/tmdb';
+import path from 'path';
+import tmdb, { TMDBMovie } from '../api/tmdb';
+import { TraktWatched } from '../handlers/traktHandler';
 import { getCleanName } from '../helpers';
 import db from '../services/db';
 import { ffmpegSync } from '../tools/ffprobe';
-import { TraktWatched } from '../handlers/traktHandler';
-
-interface TMDB {
-  adult: boolean;
-  backdrop_path: string | null;
-  genre_ids: number[];
-  id: number;
-  original_language: string;
-  original_title: string;
-  overview: string;
-  popularity: number;
-  poster_path: string | null;
-  release_date: string;
-  title: string;
-  video: boolean;
-  vote_average: number;
-  vote_count: number;
-}
 
 interface MediaUser {
   favorite: boolean;
@@ -67,7 +50,7 @@ interface FileInfo {
 
 class MediaModel {
   id!: string;
-  tmdb?: TMDB;
+  tmdb?: TMDBMovie;
   user?: MediaUser;
   fileInfo?: FileInfo;
 
@@ -95,8 +78,8 @@ class MediaModel {
     this.fileInfo = fileInfo;
 
     try {
-      if (!this.tmdb?.title) {
-        const res = await TMDBQueue.run(async () => this.fetchTMDBInfo());
+      if (!this.tmdb?.imdb_id) {
+        await tmdb.queue.run(async () => this.fetchTMDBInfo());
       }
     } catch (e) {}
 
@@ -119,12 +102,14 @@ class MediaModel {
   }
 
   private async fetchTMDBInfo() {
-    const result = await search(this.id);
+    const result = await tmdb.searchMovie(this.id);
 
-    if (result) {
-      this.tmdb = result;
-      await this.persist();
-    }
+    if (!result) return console.error('No movie found for', this.id);
+
+    const fullInfo = await tmdb.getFullMovieInfo(result.id);
+    this.tmdb = fullInfo;
+
+    await this.persist();
   }
 
   async forceRefetch() {
