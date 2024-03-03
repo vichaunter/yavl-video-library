@@ -1,26 +1,50 @@
-import { FaGear } from 'react-icons/fa6';
 import { orderBy } from 'lodash';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   FaEye,
   FaEyeSlash,
+  FaFolder,
   FaRegStar,
   FaSortAlphaDown,
   FaSortAlphaUpAlt,
   FaStar,
 } from 'react-icons/fa';
+import { FaGear, FaSpinner } from 'react-icons/fa6';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { TMDBId } from '../../../main/handlers/traktHandler';
 import MediaModel from '../../../main/models/MovieModel';
 import MediaItem from '../components/MediaItem';
+import PageItemInfo from '../components/PageItemInfo/PageItemInfo';
+import { ascDesc } from '../helpers';
 import useFiles from '../hooks/useFiles';
 import useFolder from '../hooks/useFolder';
-import { ascDesc } from '../helpers';
-import { Link } from 'react-router-dom';
 
 const Styled = styled.div`
-  .header {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+
+  > .info {
+    min-height: 45vh;
+    position: relative;
+    .header {
+      bottom: 0;
+      width: 100vw;
+      z-index: 10;
+      position: absolute;
+      display: flex;
+      justify-content: space-between;
+      .main-menu {
+        position: fixed;
+        top: 1rem;
+        right: 1rem;
+      }
+    }
+  }
+
+  > .content {
+    overflow-y: auto;
   }
 `;
 
@@ -44,6 +68,7 @@ const sortItems = (items: MediaModel[], sort: Record<string, boolean>) => {
 };
 
 const HomeScreen = () => {
+  const [selectedItem, setSelectedItem] = useState<TMDBId>();
   const [sort, setSort] = useState<Record<string, boolean>>({
     id: true,
     favorites: false,
@@ -55,6 +80,10 @@ const HomeScreen = () => {
   const { current, openDialog } = useFolder();
 
   const { items, loading } = useFiles();
+
+  useEffect(() => {
+    if (!selectedItem) setSelectedItem(items[0]?.tmdb?.id);
+  }, [items]);
 
   const toggleSort = (type: string) => {
     const newSort = { ...sort, [type]: !sort[type] };
@@ -83,34 +112,45 @@ const HomeScreen = () => {
 
   return (
     <Styled>
-      <div className="header">
-        <button onClick={openDialog}>{current}</button>
-        {loading && <div>Loading...</div>}
-        <div className="actions">
-          <button onClick={() => toggleSort('id')}>
-            {sort.id ? <FaSortAlphaDown /> : <FaSortAlphaUpAlt />}
+      <div className="info">
+        {selectedItem && <PageItemInfo selectedId={selectedItem} />}
+        <div className="header grid">
+          <button onClick={openDialog} className="link">
+            {current ? current : <FaFolder />}{' '}
+            {loading && <FaSpinner className="spin" />}
           </button>
-          <button onClick={() => toggleSort('favorites')}>
-            {sort.favorites ? <FaStar /> : <FaRegStar />}
-          </button>
-          <button onClick={() => togglefilter('watched')}>
-            {filter.watched ? <FaEye /> : <FaEyeSlash />}
-          </button>
+
+          <div className="actions">
+            <button onClick={() => toggleSort('id')} className="link">
+              {sort.id ? <FaSortAlphaDown /> : <FaSortAlphaUpAlt />}
+            </button>
+            <button onClick={() => toggleSort('favorites')} className="link">
+              {sort.favorites ? <FaStar /> : <FaRegStar />}
+            </button>
+            <button onClick={() => togglefilter('watched')} className="link">
+              {filter.watched ? <FaEye /> : <FaEyeSlash />}
+            </button>
+          </div>
+          <nav className="main-menu">
+            <Link to="/config" className="link">
+              <FaGear />
+            </Link>
+          </nav>
         </div>
-        <Link to="/config" className="link">
-          <FaGear />
-        </Link>
       </div>
-      <div className="grid-container">
-        {sortedItems?.map((file) => {
-          return (
-            <MediaItem
-              key={file.fileInfo?.data?.fullpath}
-              item={file}
-              className="grid-item"
-            />
-          );
-        })}
+      <div className="content">
+        <div className="grid-container">
+          {sortedItems?.map((file) => {
+            return (
+              <MediaItem
+                key={file.fileInfo?.data?.fullpath}
+                item={file}
+                className="grid-item"
+                onClick={() => setSelectedItem(file.tmdb?.id)}
+              />
+            );
+          })}
+        </div>
       </div>
     </Styled>
   );

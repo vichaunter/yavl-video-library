@@ -84,8 +84,9 @@ const StyledDescription = styled.div`
 type Props = {
   item: MediaModel;
   className?: string;
+  onClick?: () => void;
 };
-const MediaItem: FC<Props> = ({ item, className }) => {
+const MediaItem: FC<Props> = ({ item, className, onClick }) => {
   const [active, setActive] = useState(false);
   if (!item?.id || !item?.tmdb)
     return <div className={className}>Loading...</div>;
@@ -96,8 +97,9 @@ const MediaItem: FC<Props> = ({ item, className }) => {
     <>
       <StyledMedia
         className={className}
-        onMouseEnter={() => setActive(true)}
-        onMouseLeave={() => setActive(false)}
+        // onMouseEnter={() => setActive(true)}
+        // onMouseLeave={() => setActive(false)}
+        onClick={onClick}
       >
         <div className={cn('content', { watched: item.user?.watched })}>
           <div

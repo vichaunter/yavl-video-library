@@ -9,6 +9,16 @@ export interface TMDBProductionCountry {
   iso_3166_1: string;
   name: string;
 }
+export interface TMDBVideo {
+  id: string;
+  iso_639_1: string;
+  iso_3166_1: string;
+  key: string;
+  name: string;
+  site: string;
+  size: number;
+  type: string;
+}
 export interface TMDBProductionCompany {
   id: number;
   logo_path: string | null;
@@ -54,6 +64,7 @@ export interface TMDBMovie {
   tagline: string;
   title: string;
   video: boolean;
+  videos: { results: TMDBVideo[] };
   vote_average: number;
   vote_count: number;
 }

@@ -28,7 +28,7 @@ body {
 }
 
 .spin {
-  animation: spin 1s linear infinite;
+  animation: spin 1s cubic-bezier(0.42, 0, 0.58, 1) infinite;
 }
 
 button.link {
